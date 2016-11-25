@@ -34,7 +34,7 @@ public abstract class Loan implements Comparable<Loan>{
 
 	public String toString() {
 		//TODO
-		return name; 
+		return name + interestRate + length + principle; 
 	}
 }
 
@@ -42,6 +42,7 @@ public class SimpleLoan extends Loan {
 	public void calcMonthPayment () {
 		// calculate the monthly payment using the appropriate formula
 		// assign the result to the data field monthlyPayment
+		monthlyPayment = (principle * (interestRate * length + 1)) / length;
 	}
 	
 	public String toString() { 
