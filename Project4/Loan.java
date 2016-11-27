@@ -17,17 +17,15 @@ public abstract class Loan implements Comparable<Loan>{
 		// call method makeSummary()
 		// return the summary
 		calcMonthPayment();
-		makeSummary();
-		//TODO
 		
-		return null;
+		return makeSummary();
 	}
 
 	abstract public void calcMonthPayment(); // an abstract method
 
 	public String makeSummary() {
 		// make and return a summary on the loan
-		String summary =  "Name: " + name + "\n Interest Rate: " + interestRate + "\nAmount of Years: " + length + "\nAmount: " + principle;
+		String summary = "";
 		
 		return summary;
 	}
@@ -42,11 +40,11 @@ public class SimpleLoan extends Loan {
 	public void calcMonthPayment () {
 		// calculate the monthly payment using the appropriate formula
 		// assign the result to the data field monthlyPayment
-		monthlyPayment = (principle * (interestRate * length + 1)) / length;
+		monthlyPayment = (principle * ((interestRate / 12) * length + 1)) / length;
 	}
 	
 	public String toString() { 
-		return "Simple Interest Loan"; 
+		return "Simple Interest Loan: " + monthlyPayment; 
 	}
 }
 
@@ -54,10 +52,11 @@ public class AmortizedLoan extends Loan {
 	public void calcMonthPayment () {
 		// calculate the monthly payment using the appropriate formula
 		// assign the result to the data field monthlyPayment
+		
 		return null;
 	}
 	
 	public String toString() { 
-		return "Full Amortized Loan"; 
+		return "Full Amortized Loan: " + monthlyPayment; 
 	}
 }
