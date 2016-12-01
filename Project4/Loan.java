@@ -1,4 +1,4 @@
-public abstract class Loan implements Comparable<Loan>{
+﻿public abstract class Loan implements Comparable<Loan>{
 	protected String name; // the applicant’s name
 	protected double interestRate; // the annual interest rate
 	protected int length; // the length of the load in years
@@ -39,7 +39,7 @@ public abstract class Loan implements Comparable<Loan>{
 public class SimpleLoan extends Loan {
 	public void calcMonthPayment () {
 		// calculate the monthly payment using the appropriate formula
-		// assign the result to the data field monthlyPayment
+		// assigns the result to the data field monthlyPayment
 		monthlyPayment = (principle * ((interestRate / 12) * length + 1)) / length;
 	}
 	
