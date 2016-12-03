@@ -30,6 +30,13 @@
 		return summary;
 	}
 
+	public Boolean exists(){
+		//Check to see if a loan record exists
+		
+		
+		return false;
+	}
+	
 	public String toString() {
 		//TODO
 		return name + interestRate + length + principle; 

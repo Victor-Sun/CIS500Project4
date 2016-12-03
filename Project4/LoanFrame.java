@@ -9,16 +9,15 @@ import javax.swing.border.TitledBorder;
  *
  */
 public class LoanFrame extends JFrame{
-	private JButton add, search, save, summary, calculate;
+	private JButton add, search, save, summary, aCalculate, sEdit, sDelete, sSearch;
 	private Panel panel;
-	private JPanel aNorth, aCenter, aSouth;
+	private JPanel aNorth, aCenter, aSouth, sNorth, sCenter, sSouth;
 	private JInternalFrame aFrame, seFrame, suFrame;
 	private JDesktopPane desktop;
-	private ButtonGroup b;
-	private JRadioButton simple, amortized;
-	private JLabel alName, alPrincipal, alLength, alRate, alPayment, alPay;
-	private JTextField atName, atPrincipal, atLength, atRate;
-	private JComboBox cRate;
+	private ButtonGroup b, sb;
+	private JRadioButton aSimple, aAmortized, sSimple, sAmortized;
+	private JLabel alPayment, alPay;
+	private JTextField atName, atPrincipal, atLength, sName, sPrincipal, sLength, sPayment;
 	private JOptionPane alError;
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEGHT = 700;
@@ -32,38 +31,57 @@ public class LoanFrame extends JFrame{
 		search = new JButton("Search");
 		save = new JButton("Save");
 		summary = new JButton("Summary");
-		calculate = new JButton("Calculate");
-		simple = new JRadioButton("Simple");
-		amortized = new JRadioButton("Amortized");
-
-		alName = new JLabel("Name: ");
-		alPrincipal = new JLabel("Principal: ");
-		alLength = new JLabel("Length: ");
-		alRate = new JLabel("Interest Rate: ");
-		alPay = new JLabel("Montly Payment: ");
+		aCalculate = new JButton("Calculate");
+		
+		sEdit = new JButton("Edit");
+		sEdit.setEnabled(false);
+		sDelete = new JButton("Delete");
+		sDelete.setEnabled(false);
+		sSearch = new JButton("Search");
+		
+		aSimple = new JRadioButton("Simple");
+		aAmortized = new JRadioButton("Amortized");
+		sSimple = new JRadioButton("Simple");
+		sAmortized = new JRadioButton("Amortized");
+		
+		//Add Loan Labels
 		alPayment = new JLabel("$$$$.$$");
 
 		atName = new JTextField();
 		atPrincipal = new JTextField();
 		atLength = new JTextField();
-		atRate = new JTextField();
-
+		sName = new JTextField();
+		sPrincipal = new JTextField();
+		sLength = new JTextField();
+		sPayment = new JTextField();
+		
 		alError = new JOptionPane("Error");
 		
 		Double arRate[] = {0.03, 0.04, 0.05, 0.06, 0.07};
 		JComboBox<Double> cRate = new JComboBox<>(arRate);
+		JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
 		
 		aNorth = new JPanel();
 		aCenter = new JPanel();
 		aCenter.setLayout(new GridLayout(0,2));
 		aSouth = new JPanel();
+		
+		sNorth = new JPanel();
+		sCenter = new JPanel();
+		sCenter.setLayout(new GridLayout(0,2));
+		sSouth = new JPanel();
+		
 		panel = new Panel();
 
 		b = new ButtonGroup();
-		b.add(amortized);
-		b.add(simple);
-		simple.setSelected(true);
-
+		b.add(aAmortized);
+		b.add(aSimple);
+		aSimple.setSelected(true);
+		sb = new ButtonGroup();
+		sb.add(sAmortized);
+		sb.add(sSimple);
+		sSimple.setSelected(true);
+		
 		//Add buttons to the desktop panel
 		panel.add(add);
 		panel.add(search);
@@ -73,20 +91,40 @@ public class LoanFrame extends JFrame{
 		//Add Loan Internal Frame
 		aNorth.setBorder(new TitledBorder(new EtchedBorder(), "Loan Type"));
 		aCenter.setBorder(new TitledBorder(new EtchedBorder(), "Loan Info"));
-		aNorth.add(simple);
-		aNorth.add(amortized);
-		aCenter.add(alName);
+		aNorth.add(aSimple);
+		aNorth.add(aAmortized);
+		aCenter.add(new JLabel("Name: "));
 		aCenter.add(atName);
-		aCenter.add(alPrincipal);
+		aCenter.add(new JLabel("Principal: "));
 		aCenter.add(atPrincipal);
-		aCenter.add(alLength);
+		aCenter.add(new JLabel("Length: "));
 		aCenter.add(atLength);
-		aCenter.add(alRate);
+		aCenter.add(new JLabel("Interest Rate: "));
 		aCenter.add(cRate);
-		aCenter.add(alPay);
+		aCenter.add(new JLabel("Montly Payment: "));
 		aCenter.add(alPayment);
-		aSouth.add(calculate);
+		aSouth.add(aCalculate);
 
+		//Search Loan Internal Frame
+		sNorth.setBorder(new TitledBorder(new EtchedBorder(), "Loan Type"));
+		sNorth.add(new JLabel("Loan Type: "));
+		sNorth.add(sSimple);
+		sNorth.add(sAmortized);
+		sCenter.setBorder(new TitledBorder(new EtchedBorder(), "Loan Info"));
+		sCenter.add(new JLabel("Name: "));
+		sCenter.add(sName);
+		sCenter.add(new JLabel("Principal: "));
+		sCenter.add(sPrincipal);
+		sCenter.add(new JLabel("Interest Rate: "));
+		sCenter.add(scInterestRate);
+		sCenter.add(new JLabel("Length: "));
+		sCenter.add(sLength);
+		sCenter.add(new JLabel("Monthly Payment: "));
+		sCenter.add(sPayment);
+		sSouth.add(sEdit);
+		sSouth.add(sDelete);
+		sSouth.add(sSearch);
+		
 		add(panel,BorderLayout.SOUTH);
 
 		addWindowListener(new WindowAdapter() {
@@ -103,8 +141,10 @@ public class LoanFrame extends JFrame{
 		add.addActionListener(new OpenListener());
 		search.addActionListener(new OpenListener());
 		summary.addActionListener(new OpenListener());
-		calculate.addActionListener(l);
+		aCalculate.addActionListener(l);
 		save.addActionListener(l);
+		sSearch.addActionListener(l);
+		sDelete.addActionListener(l);
 	}
 
 	class OpenListener implements ActionListener {
@@ -112,7 +152,7 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == add){
 				if ((aFrame == null) || (aFrame.isClosed())) {
 					aFrame = new JInternalFrame("Add Loan", true, true, true, true);
-					aFrame.setBounds(50, 50, 600, 300);
+					aFrame.setBounds(50, 50, 400, 300);
 					desktop.add(aFrame, new Integer(1));
 					aFrame.setVisible(true);
 					aFrame.setLayout(new BorderLayout());
@@ -125,9 +165,13 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == search){
 				if ((seFrame == null) || (seFrame.isClosed())) {
 					seFrame = new JInternalFrame("Search Loans", true, true, true, true);
-					seFrame.setBounds(50, 50, 200, 100);
+					seFrame.setBounds(50, 50, 400, 300);
 					desktop.add(seFrame, new Integer(1));
 					seFrame.setVisible(true);
+					
+					seFrame.add(sNorth, BorderLayout.NORTH);
+					seFrame.add(sCenter, BorderLayout.CENTER);
+					seFrame.add(sSouth, BorderLayout.SOUTH);
 				}
 			}
 			if(e.getSource() == summary){
@@ -143,28 +187,51 @@ public class LoanFrame extends JFrame{
 
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == calculate){
+			//Add Loan
+			if(e.getSource() == aCalculate){
 				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(aFrame, "Principal and Length cannot be empty!");
+					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
 				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
-					JOptionPane.showMessageDialog(aFrame, "Principal cannot be empty!");
+					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
 				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(aFrame, "Length cannot be empty!");
+					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
 				} else {
 					try{
 						double iP = Double.parseDouble(atPrincipal.getText());
 					} catch(Exception exc){
-						JOptionPane.showMessageDialog(aFrame, "Principal can only be a number!");
+						JOptionPane.showMessageDialog(null, "Principal can only be a number!");
 					}
 
 					try{
 						int iL = Integer.parseInt(atLength.getText());
 					} catch(Exception exc){
-						JOptionPane.showMessageDialog(aFrame, "Length can only be a number!");
+						JOptionPane.showMessageDialog(null, "Length can only be a number!");
 					}
 				}
-				
-				
+				//TODO Calculate
+			}
+			
+			//Search Loan
+			if(e.getSource() == sSearch){
+				if(sName.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
+				} else {
+					sEdit.setEnabled(true);
+					sDelete.setEnabled(true);
+				}
+			}
+			if(e.getSource() == sDelete){
+				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
+		        if (d == JOptionPane.YES_OPTION) {
+		        	//TODO Add method to delete record
+		        	JOptionPane.showMessageDialog(null, "Record Deleted!");
+		          }
+		          else {
+
+		          }
+			}
+			if(e.getSource() == sEdit){
+				//TODO Add method to edit record
 			}
 		}
 	}
