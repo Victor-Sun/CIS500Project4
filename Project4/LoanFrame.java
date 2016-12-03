@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultStyledDocument;
 /**
  * 
  * @author Victor
@@ -177,9 +178,14 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == summary){
 				if ((suFrame == null) || (suFrame.isClosed())) {
 					suFrame = new JInternalFrame("Loan Summary", true, true, true, true);
-					suFrame.setBounds(50, 50, 200, 100);
+					suFrame.setBounds(50, 50, 400, 300);
 					desktop.add(suFrame, new Integer(1));
 					suFrame.setVisible(true);
+					
+					JTextArea sSummary = new JTextArea();
+					sSummary.setEditable(false);
+					sSummary.setText("TODO Add Summary");
+					suFrame.add(sSummary);
 				}
 			}			
 		}
