@@ -17,13 +17,13 @@ public void calcMonthPayment()
 // assign the result to the data field monthlyPayment
 }
 
-public String toString() { 
+public String toString() 
+{ 
+	return "Simple Interest Loan"  + "\n" + "Name: " + "\t" + name + "\n" + "Principle: " + "\t" + principle + "\n" + "Interest Rate: " + "\t" + interestRate + "\n" + "Length of Loan: " + "\t" + length + "\n"  + "Payment: " + "\t" + monthlyPayment + "\n" + "\n"; 
 	
-	return "Monthly Payment for the simple loan is:" + monthlyPayment; 
-	}
-
+}
 @Override
-public int compareTo(Loan o) {
+public int compareTo(Loan arg0) {
 	
 	return 0;
 }
