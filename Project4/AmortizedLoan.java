@@ -15,7 +15,7 @@ public void calcMonthPayment()
 }
 public String toString() 
 { 
-	return "Monthly Payment for the simple loan is: " + monthlyPayment; 
+	return "Full Amortized Loan"  + "\n" + "Name: " + "\t" + name + "\n" + "Principle: " + "\t" + principle + "\n" + "Interest Rate: " + "\t" + interestRate + "\n" + "Length of Loan: " + "\t" + length + "\n"  + "Payment: " + "\t" + monthlyPayment + "\n" + "\n"; 
 	
 }
 @Override
