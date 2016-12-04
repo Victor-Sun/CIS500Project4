@@ -22,7 +22,7 @@ public class LoanManager
 
 public LoanManager() 
 {
-	loans = new ArrayList<Loan>();
+	this.loans = new ArrayList<Loan>();
 	// add methods as needed
 
 }

@@ -184,7 +184,10 @@ public class LoanFrame extends JFrame{
 					
 					JTextArea sSummary = new JTextArea();
 					sSummary.setEditable(false);
-					sSummary.setText("TODO Add Summary");
+					sSummary.setText("Total Loans: " + 
+									"\nAmount of Simple Loans: " + 
+									"\nAmount of Amortized Loans: " +
+									"\nTotal amount of money borrowed: ");
 					suFrame.add(sSummary);
 				}
 			}			
