@@ -1,15 +1,26 @@
-//Silll Incomplete. Working on Completing the search and edit Methods
+//Added more methods to load the file into the array list when the program starts, cleaned up the add loan method, 
+//updated the delete and search loan methods. What is left is to read the data from file into the arraylist to update, search and
+//delete while it is in memory and then write updated arraylist back to file.
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.stream.Stream;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -17,120 +28,160 @@ public class LoanManager
 {
 	private ArrayList<Loan> loans;
 	Scanner in = new Scanner(System.in);
-	File fileName = new File("Loan.txt");
-	String currentSelectedLoanType;
+	static File fileName = new File("Loan.txt");
 
 
 public LoanManager() 
 {
-	this.loans = new ArrayList<Loan>();
-	this.currentSelectedLoanType = "";
-	// add methods as needed
+	loans = new ArrayList<Loan>();
 
+}
+
+
+public static ArrayList <Loan> loadLoan() {
+	
+	ArrayList <Loan> loans = new ArrayList();
+	
+
+try {
+		
+		BufferedReader input = new BufferedReader(new FileReader(fileName));
+		String line = input.readLine();
+		if (!input.ready()){
+			throw new IOException();
+		}
+		while ((line = input.readLine()) != null){
+		
+			loans.add(line);
+			
+            
+		}
+		input.close();
+}
+catch (IOException e){
+	System.out.println(e);
+}
+
+int sz = loans.size();
+for (int i = 0; i < sz; i++)
+{
+	System.out.println(loans.get(i).toString());
+}
+return loans;
+		
+
+}
+
+	
+public static ArrayList<Loan> GetArrayList()
+{
+	return loadLoan();
+}
+
+public static void viewArrayList() {
+    System.out.println(GetArrayList());
 }
 
 public void addLoan(String name, double interestRate, int length, double principle)
 {
-
-	String loanType = this.GetCurrentLoanType();
-	
+	System.out.println("What type of Loan do you need?");
+	String loanType = in.next();	
+		
 	if(loanType.equals("Simple"))
-	{				
-		simpleLoan simple = new simpleLoan(name, interestRate, length, principle);
-		simple.calcMonthPayment(); 
-		//System.out.println(simple.toString());
-		loans.add(new simpleLoan(name, interestRate, length, principle));
+	{
+					
+	simpleLoan simple = new simpleLoan(name, interestRate, length, principle);
+	simple.calcMonthPayment(); 
+	loans.add(simple);
+	System.out.println(simple.toString());
+	System.out.println(loans);
+	Collections.sort(loans);
 	}
 	
 	else if (loanType.equals("Amortized"))
 	{
+	
 		AmortizedLoan amortized = new AmortizedLoan(name, interestRate, length, principle);
 		amortized.calcMonthPayment(); 
-		//System.out.println(amortized.toString());
-		loans.add(amortized);	
-	}
-	
+		loans.add(amortized);
+		System.out.println(amortized.toString());
+		System.out.println(loans);
+		Collections.sort(loans);
+
+}
 	else
 	{
 		JOptionPane.showMessageDialog(null,"Loan not Supported. Please Enter either Simple or Amortized");
 	}
-	
-	
-	try {
+
+try {
+		
 		FileWriter fw = new FileWriter(fileName, true);
 		Writer output = new BufferedWriter(fw);
 		int sz = loans.size();
 		for (int i = 0; i < sz; i++){
 		output.write(loans.get(i).toString() + "\n");
 		output.close();
-		}
+		
+	}
 	}
 		catch (Exception e)
 		{
 			JOptionPane.showMessageDialog(null, "Error Creating File!");
-		}
-	
-	// Finally reset the currentSelectedLoanType after adding
-		this.GetCurrentLoanType();
 }
-
-public void editLoan(String name, double interestRate, int length, double principle)
-{
-	//System.out.println("What type of Loan do you need?");
-	String loanType = this.GetCurrentLoanType();
-	
-	int pos = loans.indexOf(name);
-	
-	if(loanType.equals("Simple"))
-	{
-					
-	simpleLoan simple = new simpleLoan(name, interestRate, length, principle);
-	simple.calcMonthPayment(); 
-	loans.set(pos, new simpleLoan(name, interestRate, length, principle));
-	}
-	
-	else if (loanType.equals("Amortized"))
-	{
-	
-		AmortizedLoan amortized = new AmortizedLoan(name, interestRate, length, principle);
-		amortized.calcMonthPayment(); 
-		System.out.println(amortized.toString());
-		loans.set(pos, new AmortizedLoan(name, interestRate, length, principle));
-		
-	}
-
-		Collections.sort(loans);
-		
-
-			
-		}
+}
 
 
 public void deleteLoan(String name)
 {
 	
-	if(loans.contains(name))
-	{
-	loans.remove(name);
-	}
-	else System.out.println("User does not exist!");
+	
+	int i;
 
-
-
+		for(i=0;i<loans.size();++i){
+        	if(loans.get(i).name.contains(name))
+        	{
+        	System.out.println("Present! at " + i);
+        	loans.remove(i);
+        	System.out.println(loans);
+        	break;
+		}
+      	
+        	else JOptionPane.showMessageDialog(null,"User does not exist!");
+        		
+        
+		}
 }
-
-// This should if found return a loan type object
-public void SearchLoan(String name)
+        	
+public void SearchLoan(ArrayList<Loan> loans, String names)
 
 {
-	if(loans.contains(name))
-	{
-	loans.remove(name);
+	int i;
+	Loan search;
+
+	for(i=0;i<loans.size();++i){
+    	if(loans.get(i).name.contains(names)){
+    	search = loans.get(i);
+    	System.out.println(search);
+    	break;
 	}
-	else System.out.println("User does not exist!");
+  	
+    	else JOptionPane.showMessageDialog(null,"User does not exist!");
+    
+	}
 
 
 }
+
+public String toString() 
+
+{
+
+	return "List";
+}
+}
+
+
 
 // This can be also called search loan and the above method can be replaced with this
 // Returns a specific loan or loans when found or not found it will return empty list
