@@ -11,8 +11,7 @@ public simpleLoan(String name, double rate, int years, double amount) {
 public void calcMonthPayment() 
 
 {
-	
-	monthlyPayment = (principle * (interestRate*length + 1))/length ;
+    monthlyPayment = (principle * (interestRate*length + 1))/(12*length) ;
 // calculate the monthly payment using the appropriate formula
 // assign the result to the data field monthlyPayment
 }

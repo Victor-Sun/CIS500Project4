@@ -4,11 +4,10 @@ public AmortizedLoan(String name, double rate, int years, double amount) {
 		super(name, rate, years, amount);
 		
 	}
-public void calcMonthPayment() 
-
-{
-	double n = Math.pow((1 + interestRate), length);
-	monthlyPayment = (principle * interestRate* n)/(n - 1);
+public void calcMonthPayment() {
+	double monthlyIntRate = (double)(interestRate / 12);
+	
+	monthlyPayment = (principle * monthlyIntRate) / (1 - Math.pow(1 + monthlyIntRate, -length*12));
 	
 // calculate the monthly payment using the appropriate formula
 // assign the result to the data field monthlyPayment
