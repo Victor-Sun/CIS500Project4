@@ -242,9 +242,6 @@ public class LoanFrame extends JFrame{
 				} else if(loan.exists(sName.getText())){
 					JOptionPane.showMessageDialog(null, "Person does not exist!");
 				} else {
-					Loan tmpLoan;
-					tmpLoan = loan.SearchLoan(sName.getText().toString());
-
 					//TODO
 
 					sPrincipal.setEnabled(true);
@@ -265,8 +262,21 @@ public class LoanFrame extends JFrame{
 				}
 			}
 			if(e.getSource() == sEdit){
-				//TODO Add method to edit record
+				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
+					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
+				} else if(!atPrincipal.getText().matches("[0-9]+")){
+					JOptionPane.showMessageDialog(null, "Principal can only be a number!");
+				} else if(!atLength.getText().matches("[0-9]+")){		
+					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
+				} else {
+
+				}
 			}
+			//TODO Add method to edit record
 		}
 	}
 }
