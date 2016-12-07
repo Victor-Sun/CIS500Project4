@@ -24,9 +24,10 @@ public class LoanFrame extends JFrame{
 	private JOptionPane alError;
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEGHT = 700;
-	Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
-	JComboBox<Double> cRate = new JComboBox<>(arRate);
-	JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
+	private Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
+	private JComboBox<Double> cRate = new JComboBox<>(arRate);
+	private JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
+	private LoanManager loan = new LoanManager();
 	
 	public LoanFrame(){
 		super("Loan Manager");
@@ -148,59 +149,6 @@ public class LoanFrame extends JFrame{
 		sSearch.addActionListener(l);
 		sDelete.addActionListener(l);
 	}
-
-
-	private class ButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			LoanManager loan = new LoanManager();
-			
-			//Add Loan
-			if(e.getSource() == aCalculate){
-				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
-					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
-				} else if(!atPrincipal.getText().matches("[0-9]+")){
-						JOptionPane.showMessageDialog(null, "Principal can only be a number!");
-				} else if(!atLength.getText().matches("[0-9]+")){		
-						JOptionPane.showMessageDialog(null, "Length can only be a number!");	
-				} else {
-					if(aSimple.isSelected()){
-						loan.setLoanType("Simple");	
-					} else {
-						loan.setLoanType("Amortized");
-					}
-					loan.addLoan(atName.getText(), Double.parseDouble((String) cRate.getSelectedItem()), Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
-					
-				}
-			}
-			
-			//Search Loan
-			if(e.getSource() == sSearch){
-				if(sName.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
-				} else {
-					sEdit.setEnabled(true);
-					sDelete.setEnabled(true);
-				}
-			}
-			if(e.getSource() == sDelete){
-				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
-		        if (d == JOptionPane.YES_OPTION) {
-		        	//TODO Add method to delete record
-		        	JOptionPane.showMessageDialog(null, "Record Deleted!");
-		          }
-		          else {
-
-		          }
-			}
-			if(e.getSource() == sEdit){
-				//TODO Add method to edit record
-			}
-		}
-	}
 	
 	class OpenListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -227,6 +175,11 @@ public class LoanFrame extends JFrame{
 					seFrame.add(sNorth, BorderLayout.NORTH);
 					seFrame.add(sCenter, BorderLayout.CENTER);
 					seFrame.add(sSouth, BorderLayout.SOUTH);
+					
+					sPrincipal.setEnabled(false);
+					scInterestRate.setEnabled(false);
+					sLength.setEnabled(false);
+					sPayment.setEnabled(false);
 				}
 			}
 			if(e.getSource() == summary){
@@ -238,13 +191,85 @@ public class LoanFrame extends JFrame{
 					
 					JTextArea sSummary = new JTextArea();
 					sSummary.setEditable(false);
-					sSummary.setText("Total Loans: " + 
-									"\nAmount of Simple Loans: " + 
-									"\nAmount of Amortized Loans: " +
-									"\nTotal amount of money borrowed: ");
+					sSummary.setText("Total Loans: " + loan.totalLoan() +
+									"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
+									"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
+									"\nTotal amount of money borrowed: " + loan.totalMoney());
 					suFrame.add(sSummary);
 				}
 			}			
+		}
+	}
+	
+
+
+	private class ButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			
+			//Add Loan
+			if(e.getSource() == aCalculate){
+				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
+					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
+				} else if(!atPrincipal.getText().matches("[0-9]+")){
+						JOptionPane.showMessageDialog(null, "Principal can only be a number!");
+				} else if(!atLength.getText().matches("[0-9]+")){		
+						JOptionPane.showMessageDialog(null, "Length can only be a number!");	
+				} else {
+					if(aSimple.isSelected()){
+						loan.setLoanType("Simple");	
+					} else {
+						loan.setLoanType("Amortized");
+					}
+					loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+					
+					if(loan.getLoanType() == "Simple"){
+						SimpleLoan l = new SimpleLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+						l.calcMonthPayment();
+						alPayment.setText(Double.toString(l.getMonthlyPayment()));
+					} else {
+						AmortizedLoan l = new AmortizedLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+						l.calcMonthPayment();
+						alPayment.setText(Double.toString(l.getMonthlyPayment()));
+					}
+				}
+			}
+			
+			//Search Loan
+			if(e.getSource() == sSearch){
+				if(sName.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
+//				} else if(!loan.exists(sName.getText())){
+//					JOptionPane.showMessageDialog(null, "Person does not exist!");
+				} else {
+					Loan tmpLoan;
+					tmpLoan = loan.SearchLoan(sName.getText().toString());
+					
+					//TODO
+					
+					sPrincipal.setEnabled(true);
+					scInterestRate.setEnabled(true);
+					sLength.setEnabled(true);
+					sPayment.setEnabled(true);
+					sEdit.setEnabled(true);
+					sDelete.setEnabled(true);
+				}
+			}
+			if(e.getSource() == sDelete){
+				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
+		        if (d == JOptionPane.YES_OPTION) {
+		        	loan.deleteLoan("AB");
+		        	JOptionPane.showMessageDialog(null, "Record Deleted!");
+		          } else {
+		        	  JOptionPane.showMessageDialog(null, "Nothing Happened!");
+		          }
+			}
+			if(e.getSource() == sEdit){
+				//TODO Add method to edit record
+			}
 		}
 	}
 }

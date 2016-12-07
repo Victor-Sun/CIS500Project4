@@ -5,19 +5,49 @@ public abstract class Loan implements Comparable<Loan>
 	protected int length; // the length of the load in years
 	protected double principle; // the principle
 	protected double monthlyPayment; // the monthly payment
-
-
-	public Loan (String name, double rate, int years, double amount) 
-
-	{
+	protected String type;
+	
+	
+	public Loan(){
+		
+	}
+	public Loan (String name, double rate, int years, double amount) {
 		this.name = name;
 		this.interestRate = rate;
 		this.length = years;
 		this.principle = amount;
-
 		// constructor
 
 	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}	
+	
+	public String getName(){
+		return this.name;
+	}
+	
+	public double getRate(){
+		return this.interestRate;
+	}
+	
+	public int getLength(){
+		return this.length;
+	}
+	
+	public double getPrinciple(){
+		return this.principle;
+	}
+
+	public double getMonthlyPayment() {
+		return monthlyPayment;
+	}
+	
 	public String process() 
 	{
 		calcMonthPayment();
@@ -30,10 +60,6 @@ public abstract class Loan implements Comparable<Loan>
 
 	abstract public void calcMonthPayment(); // an abstract method
 
-	public double getMonthlyPayment() {
-		return monthlyPayment;
-	}
-	
 	public int compareTo(){
 		return 0;
 	}

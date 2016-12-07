@@ -8,8 +8,6 @@ public class SimpleLoan extends Loan {
 
 	public void calcMonthPayment(){
 		monthlyPayment = (principle * (interestRate*length + 1))/(12*length) ;
-		// calculate the monthly payment using the appropriate formula
-		// assign the result to the data field monthlyPayment
 	}
 
 	public String toString(){ 
@@ -19,6 +17,22 @@ public class SimpleLoan extends Loan {
 	
 	public double getMonthlyPayment() {
 		return monthlyPayment;
+	}
+	
+	public String getName(){
+		return this.name;
+	}
+	
+	public double getRate(){
+		return this.interestRate;
+	}
+	
+	public int getLength(){
+		return this.length;
+	}
+	
+	public double getPrinciple(){
+		return this.principle;
 	}
 	
 	@Override

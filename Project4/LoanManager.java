@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.stream.Stream;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -28,6 +29,7 @@ public class LoanManager {
 	ArrayList fileloans = new ArrayList();
 	String loanType = "Simple";
 	double monthlyPayment;
+	int pos=0;
 	
 	public LoanManager() {
 		loans = new ArrayList <Loan>();
@@ -70,128 +72,118 @@ public class LoanManager {
 			SimpleLoan simple = new SimpleLoan(name, interestRate, length, principle);
 			simple.calcMonthPayment();
 			loans.add(simple);
-//			System.out.println(simple.toString());
-//			System.out.println(loans);
 			Collections.sort(loans);
 		} else if (loanType.equals("Amortized")) {
 			AmortizedLoan amortized = new AmortizedLoan(name, interestRate, length, principle);
 			amortized.calcMonthPayment();
 			loans.add(amortized);
-//			System.out.println(amortized.toString());
-//			System.out.println(loans);
 			Collections.sort(loans);
 		} else {
 			JOptionPane.showMessageDialog(null, "Loan not Supported. Please Enter either Simple or Amortized");
 		}
-		try {
-
-			FileWriter fw = new FileWriter(fileName, true);
-			Writer output = new BufferedWriter(fw);
-			int sz = loans.size();
-			for (int i = 0; i < sz; i++) {
-				output.append(loans.get(i) + "\n");
-				loans.clear();
-			}
-			output.close();
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error Creating File!");
+		
+		//This needs to be in a seperate method/function
+//		try {
+//			FileWriter fw = new FileWriter(fileName, true);
+//			Writer output = new BufferedWriter(fw);
+//			int sz = loans.size();
+//			for (int i = 0; i < sz; i++) {
+//				output.append(loans.get(i) + "\n");
+//				loans.clear();
+//			}
+//			output.close();
+//		} catch (Exception e) {
+//			JOptionPane.showMessageDialog(null, "Error Creating File!");
+//		}
+	}
+	
+	public void addLoan(Loan loan){
+		if (loanType.equals("Simple")) {
+			SimpleLoan simple = (SimpleLoan) loan;
+			simple.calcMonthPayment();
+			loans.add(simple);
+			Collections.sort(loans);
+			
+			
+		} else if (loanType.equals("Amortized")) {
+			AmortizedLoan amortized = (AmortizedLoan) loan;
+			amortized.calcMonthPayment();
+			loans.add(amortized);
+			Collections.sort(loans);
+		} else {
+			JOptionPane.showMessageDialog(null, "Loan not Supported. Please Enter either Simple or Amortized");
 		}
-
 	}
 
+	public boolean exists(String names){
+		for (int i = 0; i < loans.size(); ++i) {
+			Loan tmpL = loans.get(i);
+			if (tmpL.getName() == names) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
-
-	public void deleteLoan(String name) {
-		loadLoan();
-		int i;
-
-		for (i = 0; i < fileloans.size(); ++i) {
-			if (fileloans.contains(name)) {
-				System.out.println("Present! at " + i);
-				fileloans.remove(i);
-				System.out.println(fileloans);
+	public void deleteLoan(String name){
+		for(int i = 0; i < loans.size(); ++i) {
+			Loan tmpL = loans.get(i);
+			if (tmpL.getName() == name){
+				loans.remove(i);
 				break;
 			}
-
-			//else JOptionPane.showMessageDialog(null,"User does not exist!");
-
 		}
 	}
 
-	public void SearchLoan(String names)
-	{
-
-		int i;
-		Loan search;
-
-		for (i = 0; i < fileloans.size(); ++i) {
-			if (fileloans.contains(names)) {
+	public Loan SearchLoan(String names){
+		Loan search = null;
+		for(int i = 0; i < loans.size(); ++i){
+			Loan tmpL = loans.get(i);
+			if(tmpL.getName() == names) {
 				search = loans.get(i);
-				System.out.println(search);
 				break;
 			}
-			//else JOptionPane.showMessageDialog(null,"User does not exist!");
 		}
-
-
+		return search;
 	}
 
-	public void totalMoney()
-	{
-		int i;
+	public double totalMoney(){
 		double totalBorrowed = 0;
 
-		for (i = 0; i < loans.size(); ++i) {
-
-			totalBorrowed = totalBorrowed + loans.get(i).principle;
-
-			//break;
+		for (int i = 0; i < loans.size(); ++i) {
+			totalBorrowed += loans.get(i).principle;
 		}
-		System.out.println(totalBorrowed);
-
+		return totalBorrowed;
 	}
 
-	public void totalLoan()
-	{
-		int i;
-
-		for (i = 0; i < loans.size(); ++i) {}
-		System.out.println(i);
-
+	public int totalLoan(){
+		return loans.size();
 	}
 
-	public void totalSimpleLoan()
-
-	{
-
-		int i;
+	public int totalSimpleLoan(){
 		int x = 0;
 
-		for (i = 0; i < loans.size(); ++i) {
+		for (int i = 0; i < loans.size(); ++i) {
 			if (loans.get(i).toString().contains("Simple")) {
-				x = x + 1;
+				x++;
 			}
-			System.out.println(x);
 		}
+		return x;
 	}
 
-	public void totalAmortizedLoan()
-	{
-
-		int i;
+	public int totalAmortizedLoan(){
 		int x = 0;
 
-		for (i = 0; i < loans.size(); ++i) {
+		for (int i = 0; i < loans.size(); ++i) {
 			if (loans.get(i).toString().contains("Amortized")) {
-				x = x + 1;
+				x++;
 			}
-			System.out.println(x);
 		}
+		return x;
 	}
 
-	public String toString()
-	{
-
-		return "List";
+	public String toString(){
+		return loans.toString();	
 	}
 }
