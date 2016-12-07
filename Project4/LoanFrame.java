@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -27,6 +26,7 @@ public class LoanFrame extends JFrame{
 	private JComboBox<Double> cRate = new JComboBox<>(arRate);
 	private JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
 	private LoanManager loan = new LoanManager();
+	private JTextArea sSummary = new JTextArea();
 
 	public LoanFrame(){
 		super("Loan Manager");
@@ -147,6 +147,12 @@ public class LoanFrame extends JFrame{
 		sDelete.addActionListener(l);
 	}
 
+	public void refresh(){
+		sSummary.setText("Total Loans: " + loan.totalLoan() +
+				"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
+				"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
+				"\nTotal amount of money borrowed: " + loan.totalMoney());
+	}
 	class OpenListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == add){
@@ -186,12 +192,10 @@ public class LoanFrame extends JFrame{
 					desktop.add(suFrame, new Integer(1));
 					suFrame.setVisible(true);
 
-					JTextArea sSummary = new JTextArea();
+
+
 					sSummary.setEditable(false);
-					sSummary.setText("Total Loans: " + loan.totalLoan() +
-							"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
-							"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
-							"\nTotal amount of money borrowed: " + loan.totalMoney());
+					refresh();
 					suFrame.add(sSummary);
 				}
 			}			
@@ -233,6 +237,7 @@ public class LoanFrame extends JFrame{
 						alPayment.setText(Double.toString(l.getMonthlyPayment()));
 					}
 				}
+				refresh();
 			}
 
 			//Search Loan
@@ -260,6 +265,7 @@ public class LoanFrame extends JFrame{
 				} else {
 					JOptionPane.showMessageDialog(null, "Nothing Happened!");
 				}
+				refresh();
 			}
 			if(e.getSource() == sEdit){
 				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
@@ -275,6 +281,7 @@ public class LoanFrame extends JFrame{
 				} else {
 
 				}
+				refresh();
 			}
 			//TODO Add method to edit record
 		}
