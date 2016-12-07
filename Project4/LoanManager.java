@@ -67,7 +67,6 @@ public class LoanManager {
 
 
 	public void addLoan(String name, double interestRate, int length, double principle) {
-		//		System.out.println("What type of Loan do you need?");
 		if (loanType.equals("Simple")) {
 			SimpleLoan simple = new SimpleLoan(name, interestRate, length, principle);
 			simple.calcMonthPayment();
