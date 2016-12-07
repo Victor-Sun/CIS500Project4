@@ -26,12 +26,21 @@ public class LoanManager {
 	File fileName = new File("Loan.txt");
 	String line;
 	ArrayList fileloans = new ArrayList();
-
+	String loanType = "Simple";
+	double monthlyPayment;
+	
 	public LoanManager() {
 		loans = new ArrayList <Loan>();
 	}
 
-
+	public String getLoanType(){
+		return this.loanType;
+	}
+	
+	public void setLoanType(String type){
+		this.loanType = type;
+	}
+	
 	public void loadLoan() {
 		try{
 			BufferedReader input = new BufferedReader(new FileReader(fileName));
@@ -47,7 +56,7 @@ public class LoanManager {
 		{
 			System.out.println(e);
 		}
-		
+
 		int sz = fileloans.size();
 		for (int i = 0; i < sz; i++){
 			System.out.println(fileloans.get(i));
@@ -56,30 +65,24 @@ public class LoanManager {
 
 
 	public void addLoan(String name, double interestRate, int length, double principle) {
-		System.out.println("What type of Loan do you need?");
-		String loanType = in .next();
-
+		//		System.out.println("What type of Loan do you need?");
 		if (loanType.equals("Simple")) {
-
-			simpleLoan simple = new simpleLoan(name, interestRate, length, principle);
+			SimpleLoan simple = new SimpleLoan(name, interestRate, length, principle);
 			simple.calcMonthPayment();
 			loans.add(simple);
-			System.out.println(simple.toString());
-			System.out.println(loans);
+//			System.out.println(simple.toString());
+//			System.out.println(loans);
 			Collections.sort(loans);
 		} else if (loanType.equals("Amortized")) {
-
 			AmortizedLoan amortized = new AmortizedLoan(name, interestRate, length, principle);
 			amortized.calcMonthPayment();
 			loans.add(amortized);
-			System.out.println(amortized.toString());
-			System.out.println(loans);
+//			System.out.println(amortized.toString());
+//			System.out.println(loans);
 			Collections.sort(loans);
-
 		} else {
 			JOptionPane.showMessageDialog(null, "Loan not Supported. Please Enter either Simple or Amortized");
 		}
-
 		try {
 
 			FileWriter fw = new FileWriter(fileName, true);
@@ -99,7 +102,6 @@ public class LoanManager {
 
 
 	public void deleteLoan(String name) {
-
 		loadLoan();
 		int i;
 
@@ -117,7 +119,6 @@ public class LoanManager {
 	}
 
 	public void SearchLoan(String names)
-
 	{
 
 		int i;
@@ -136,7 +137,6 @@ public class LoanManager {
 	}
 
 	public void totalMoney()
-
 	{
 		int i;
 		double totalBorrowed = 0;
@@ -152,7 +152,6 @@ public class LoanManager {
 	}
 
 	public void totalLoan()
-
 	{
 		int i;
 
@@ -177,7 +176,6 @@ public class LoanManager {
 	}
 
 	public void totalAmortizedLoan()
-
 	{
 
 		int i;
@@ -192,7 +190,6 @@ public class LoanManager {
 	}
 
 	public String toString()
-
 	{
 
 		return "List";

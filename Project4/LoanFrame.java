@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -17,12 +19,15 @@ public class LoanFrame extends JFrame{
 	private JDesktopPane desktop;
 	private ButtonGroup b, sb;
 	private JRadioButton aSimple, aAmortized, sSimple, sAmortized;
-	private JLabel alPayment, alPay;
+	private JLabel alPayment;
 	private JTextField atName, atPrincipal, atLength, sName, sPrincipal, sLength, sPayment;
 	private JOptionPane alError;
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEGHT = 700;
-
+	Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
+	JComboBox<Double> cRate = new JComboBox<>(arRate);
+	JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
+	
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
@@ -57,10 +62,6 @@ public class LoanFrame extends JFrame{
 		sPayment = new JTextField();
 		
 		alError = new JOptionPane("Error");
-		
-		Double arRate[] = {0.03, 0.04, 0.05, 0.06, 0.07};
-		JComboBox<Double> cRate = new JComboBox<>(arRate);
-		JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
 		
 		aNorth = new JPanel();
 		aCenter = new JPanel();
@@ -148,6 +149,59 @@ public class LoanFrame extends JFrame{
 		sDelete.addActionListener(l);
 	}
 
+
+	private class ButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			LoanManager loan = new LoanManager();
+			
+			//Add Loan
+			if(e.getSource() == aCalculate){
+				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
+					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
+				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
+				} else if(!atPrincipal.getText().matches("[0-9]+")){
+						JOptionPane.showMessageDialog(null, "Principal can only be a number!");
+				} else if(!atLength.getText().matches("[0-9]+")){		
+						JOptionPane.showMessageDialog(null, "Length can only be a number!");	
+				} else {
+					if(aSimple.isSelected()){
+						loan.setLoanType("Simple");	
+					} else {
+						loan.setLoanType("Amortized");
+					}
+					loan.addLoan(atName.getText(), Double.parseDouble((String) cRate.getSelectedItem()), Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+					
+				}
+			}
+			
+			//Search Loan
+			if(e.getSource() == sSearch){
+				if(sName.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
+				} else {
+					sEdit.setEnabled(true);
+					sDelete.setEnabled(true);
+				}
+			}
+			if(e.getSource() == sDelete){
+				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
+		        if (d == JOptionPane.YES_OPTION) {
+		        	//TODO Add method to delete record
+		        	JOptionPane.showMessageDialog(null, "Record Deleted!");
+		          }
+		          else {
+
+		          }
+			}
+			if(e.getSource() == sEdit){
+				//TODO Add method to edit record
+			}
+		}
+	}
+	
 	class OpenListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == add){
@@ -191,57 +245,6 @@ public class LoanFrame extends JFrame{
 					suFrame.add(sSummary);
 				}
 			}			
-		}
-	}
-
-	private class ButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			//Add Loan
-			if(e.getSource() == aCalculate){
-				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
-					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
-				} else {
-					try{
-						double iP = Double.parseDouble(atPrincipal.getText());
-					} catch(Exception exc){
-						JOptionPane.showMessageDialog(null, "Principal can only be a number!");
-					}
-
-					try{
-						int iL = Integer.parseInt(atLength.getText());
-					} catch(Exception exc){
-						JOptionPane.showMessageDialog(null, "Length can only be a number!");
-					}
-				}
-				//TODO Calculate
-			}
-			
-			//Search Loan
-			if(e.getSource() == sSearch){
-				if(sName.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
-				} else {
-					sEdit.setEnabled(true);
-					sDelete.setEnabled(true);
-				}
-			}
-			if(e.getSource() == sDelete){
-				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
-		        if (d == JOptionPane.YES_OPTION) {
-		        	//TODO Add method to delete record
-		        	JOptionPane.showMessageDialog(null, "Record Deleted!");
-		          }
-		          else {
-
-		          }
-			}
-			if(e.getSource() == sEdit){
-				//TODO Add method to edit record
-			}
 		}
 	}
 }

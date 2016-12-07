@@ -6,6 +6,7 @@ public abstract class Loan implements Comparable<Loan>
 	protected double principle; // the principle
 	protected double monthlyPayment; // the monthly payment
 
+
 	public Loan (String name, double rate, int years, double amount) 
 
 	{
@@ -22,8 +23,6 @@ public abstract class Loan implements Comparable<Loan>
 		calcMonthPayment();
 
 		return makeSummary();
-
-
 		// call method calcMonthlyPayment()
 		// call method makeSummary()
 		// return the summary
@@ -31,7 +30,14 @@ public abstract class Loan implements Comparable<Loan>
 
 	abstract public void calcMonthPayment(); // an abstract method
 
-
+	public double getMonthlyPayment() {
+		return monthlyPayment;
+	}
+	
+	public int compareTo(){
+		return 0;
+	}
+	
 	public String makeSummary() 
 
 	{
