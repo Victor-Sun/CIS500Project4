@@ -209,6 +209,17 @@ public class LoanManager {
 		return false;
 	}
 	
+	public String getName(){
+		String str = "";
+		for(int i = 0; i < sl.size(); i++){
+			str += sl.get(i).getName() + ", ";	
+		}
+		for(int i = 0; i < al.size(); i++){
+			str += al.get(i).getName() + ", ";	
+		}		
+		return str;
+	}
+	
 	public double getPrinciple(String name){
 		return SearchLoan(name).getPrinciple();
 	}

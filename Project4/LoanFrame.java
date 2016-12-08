@@ -247,7 +247,8 @@ public class LoanFrame extends JFrame{
 					sSummary.setText("Total Loans: " + loan.totalLoan() + 
 							"\nAmount of Simple Loans: " + loan.totalSimpleLoan() + 
 							"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
-							"\nTotal amount of money borrowed: " + loan.totalMoney());
+							"\nTotal amount of money borrowed: " + loan.totalMoney() +
+							"\nWho: " + loan.getName());
 					suFrame.add(sSummary);
 				}
 			}			
