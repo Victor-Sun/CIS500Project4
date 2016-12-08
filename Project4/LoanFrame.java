@@ -31,7 +31,8 @@ public class LoanFrame extends JFrame{
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
-
+		loan.loadLoan();
+		
 		//Initializing variables
 		add = new JButton("Add");
 		search = new JButton("Search");
@@ -153,6 +154,7 @@ public class LoanFrame extends JFrame{
 				"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
 				"\nTotal amount of money borrowed: " + loan.totalMoney());
 	}
+	
 	class OpenListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == add){
@@ -195,7 +197,10 @@ public class LoanFrame extends JFrame{
 
 
 					sSummary.setEditable(false);
-					refresh();
+					sSummary.setText("Total Loans: " + loan.totalLoan() +
+							"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
+							"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
+							"\nTotal amount of money borrowed: " + loan.totalMoney());
 					suFrame.add(sSummary);
 				}
 			}			
@@ -279,11 +284,14 @@ public class LoanFrame extends JFrame{
 				} else if(!atLength.getText().matches("[0-9]+")){		
 					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
 				} else {
-
+					//TODO Add method to edit record
 				}
 				refresh();
 			}
-			//TODO Add method to edit record
+			if(e.getSource() == save){
+				loan.saveSession();
+				JOptionPane.showMessageDialog(null, "Session saved!");
+			}
 		}
 	}
 }

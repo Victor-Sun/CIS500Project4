@@ -30,7 +30,7 @@ public class LoanManager {
 	String loanType = "Simple";
 	double monthlyPayment;
 	int pos=0;
-	
+
 	public LoanManager() {
 		loans = new ArrayList <Loan>();
 	}
@@ -38,11 +38,11 @@ public class LoanManager {
 	public String getLoanType(){
 		return this.loanType;
 	}
-	
+
 	public void setLoanType(String type){
 		this.loanType = type;
 	}
-	
+
 	public void loadLoan() {
 		try{
 			BufferedReader input = new BufferedReader(new FileReader(fileName));
@@ -56,15 +56,30 @@ public class LoanManager {
 		}
 		catch (IOException e)
 		{
-			System.out.println(e);
+			JOptionPane.showMessageDialog(null, "Previous Session could not be found, starting new session.");
 		}
 
 		int sz = fileloans.size();
 		for (int i = 0; i < sz; i++){
-			System.out.println(fileloans.get(i));
+			loans = fileloans;
 		}
 	}
 
+	public void saveSession(){
+		//This needs to be in a seperate method/function
+		try {
+			FileWriter fw = new FileWriter(fileName, true);
+			Writer output = new BufferedWriter(fw);
+			int sz = loans.size();
+			for (int i = 0; i < sz; i++) {
+				output.append(loans.get(i) + "\n");
+				loans.clear();
+			}
+			output.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error Creating File!");
+		}
+	}
 
 	public void addLoan(String name, double interestRate, int length, double principle) {
 		if (loanType.equals("Simple")) {
@@ -80,30 +95,16 @@ public class LoanManager {
 		} else {
 			JOptionPane.showMessageDialog(null, "Loan not Supported. Please Enter either Simple or Amortized");
 		}
-		
-		//This needs to be in a seperate method/function
-//		try {
-//			FileWriter fw = new FileWriter(fileName, true);
-//			Writer output = new BufferedWriter(fw);
-//			int sz = loans.size();
-//			for (int i = 0; i < sz; i++) {
-//				output.append(loans.get(i) + "\n");
-//				loans.clear();
-//			}
-//			output.close();
-//		} catch (Exception e) {
-//			JOptionPane.showMessageDialog(null, "Error Creating File!");
-//		}
 	}
-	
+
 	public void addLoan(Loan loan){
 		if (loanType.equals("Simple")) {
 			SimpleLoan simple = (SimpleLoan) loan;
 			simple.calcMonthPayment();
 			loans.add(simple);
 			Collections.sort(loans);
-			
-			
+
+
 		} else if (loanType.equals("Amortized")) {
 			AmortizedLoan amortized = (AmortizedLoan) loan;
 			amortized.calcMonthPayment();
@@ -121,7 +122,7 @@ public class LoanManager {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
