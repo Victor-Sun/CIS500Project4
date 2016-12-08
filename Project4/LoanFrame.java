@@ -21,7 +21,7 @@ public class LoanFrame extends JFrame{
 	private JLabel alPayment;
 	private JTextField atName, atPrincipal, atLength, sName, sPrincipal, sLength, sPayment;
 	private static final int FRAME_WIDTH = 1000;
-	private static final int FRAME_HEGHT = 700;
+	private static final int FRAME_HEGHT = 800;
 	private Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
 	private JComboBox<Double> cRate = new JComboBox<>(arRate);
 	private JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
@@ -31,7 +31,7 @@ public class LoanFrame extends JFrame{
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
-		loan.loadLoan();
+//		loan.loadLoan();
 		
 		//Initializing variables
 		add = new JButton("Add");
@@ -146,11 +146,13 @@ public class LoanFrame extends JFrame{
 		save.addActionListener(l);
 		sSearch.addActionListener(l);
 		sDelete.addActionListener(l);
-	}
+		
 
+	}
+	
 	public void refresh(){
-		sSummary.setText("Total Loans: " + loan.totalLoan() +
-				"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
+		sSummary.setText("Total Loans: " + loan.totalLoan() + 
+				"\nAmount of Simple Loans: " + loan.totalSimpleLoan() + 
 				"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
 				"\nTotal amount of money borrowed: " + loan.totalMoney());
 	}
@@ -173,7 +175,7 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == search){
 				if ((seFrame == null) || (seFrame.isClosed())) {
 					seFrame = new JInternalFrame("Search Loans", true, true, true, true);
-					seFrame.setBounds(50, 50, 400, 300);
+					seFrame.setBounds(450, 50, 400, 300);
 					desktop.add(seFrame, new Integer(1));
 					seFrame.setVisible(true);
 
@@ -190,15 +192,13 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == summary){
 				if ((suFrame == null) || (suFrame.isClosed())) {
 					suFrame = new JInternalFrame("Loan Summary", true, true, true, true);
-					suFrame.setBounds(50, 50, 400, 300);
+					suFrame.setBounds(250, 350, 400, 300);
 					desktop.add(suFrame, new Integer(1));
 					suFrame.setVisible(true);
 
-
-
 					sSummary.setEditable(false);
-					sSummary.setText("Total Loans: " + loan.totalLoan() +
-							"\nAmount of Simple Loans: " + loan.totalSimpleLoan() +
+					sSummary.setText("Total Loans: " + loan.totalLoan() + 
+							"\nAmount of Simple Loans: " + loan.totalSimpleLoan() + 
 							"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
 							"\nTotal amount of money borrowed: " + loan.totalMoney());
 					suFrame.add(sSummary);
@@ -207,12 +207,8 @@ public class LoanFrame extends JFrame{
 		}
 	}
 
-
-
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
-			//Add Loan
 			if(e.getSource() == aCalculate){
 				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
@@ -226,34 +222,40 @@ public class LoanFrame extends JFrame{
 					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
 				} else {
 					if(aSimple.isSelected()){
-						loan.setLoanType("Simple");	
-					} else {
-						loan.setLoanType("Amortized");
-					}
-					loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
-
-					if(loan.getLoanType() == "Simple"){
+						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Simple");
 						SimpleLoan l = new SimpleLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
 						l.calcMonthPayment();
 						alPayment.setText(Double.toString(l.getMonthlyPayment()));
 					} else {
+						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Amortized");
 						AmortizedLoan l = new AmortizedLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
 						l.calcMonthPayment();
 						alPayment.setText(Double.toString(l.getMonthlyPayment()));
 					}
+					refresh();
 				}
-				refresh();
 			}
 
 			//Search Loan
 			if(e.getSource() == sSearch){
 				if(sName.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Name cannot be empty when searching!");
-				} else if(loan.exists(sName.getText())){
-					JOptionPane.showMessageDialog(null, "Person does not exist!");
+				} else if(!loan.exists(sName.getText())){
+					JOptionPane.showMessageDialog(null, "Loan does not exist!");
 				} else {
-					//TODO
-
+					JOptionPane.showMessageDialog(null, "Loan found!");
+					if(loan.isSimple(sName.getText())){
+						sSimple.setSelected(true);
+					} else {
+						sAmortized.setSelected(true);
+					}
+					
+					loan.SearchLoan(sName.getText());
+					sPrincipal.setText(Double.toString(loan.getPrinciple(sName.getText())));
+					scInterestRate.setSelectedItem((double)loan.getInterest(sName.getText()));
+					sLength.setText(Integer.toString(loan.getLength(sName.getText())));
+					sPayment.setText(Double.toString(loan.getPayment(sName.getText())));
+					
 					sPrincipal.setEnabled(true);
 					scInterestRate.setEnabled(true);
 					sLength.setEnabled(true);
@@ -289,7 +291,7 @@ public class LoanFrame extends JFrame{
 				refresh();
 			}
 			if(e.getSource() == save){
-				loan.saveSession();
+				
 				JOptionPane.showMessageDialog(null, "Session saved!");
 			}
 		}

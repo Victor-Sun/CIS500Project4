@@ -11,7 +11,11 @@ public class SimpleLoan extends Loan {
 	}
 
 	public String toString(){ 
-		return "Simple Interest Loan"  + "\n" + "Name: " + "\t" + name + "\n" + "Principle: " + "\t" + principle + "\n" + "Interest Rate: " + "\t" + interestRate + "\n" + "Length of Loan: " + "\t" + length + "\n"  + "Payment: " + "\t" + monthlyPayment + "\n" + "\n"; 
+		return "Simple Interest Loan"  + "\n" + "Name: " + "\t" + name + "\n" + 
+				"Principle: " + "\t" + principle + "\n" + 
+				"Interest Rate: " + "\t" + interestRate + "\n" + 
+				"Length of Loan: " + "\t" + length + "\n"  + 
+				"Payment: " + "\t" + monthlyPayment + "\n"; 
 
 	}
 	
@@ -34,8 +38,7 @@ public class SimpleLoan extends Loan {
 	public double getPrinciple(){
 		return this.principle;
 	}
-	
-	@Override
+
 	public int compareTo(Loan arg0) {
 
 		return 0;

@@ -5,4 +5,10 @@ Interest Rate: 	0.03
 Length of Loan: 	2
 Payment: 	0.04416666666666667
 
+Simple Interest Loan
+Name: 	AB
+Principle: 	12.0
+Interest Rate: 	0.03
+Length of Loan: 	1
+Payment: 	1.03
 

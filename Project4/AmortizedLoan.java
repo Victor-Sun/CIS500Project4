@@ -10,8 +10,11 @@ public class AmortizedLoan extends Loan {
 		monthlyPayment = (principle * monthlyIntRate) / (1 - Math.pow(1 + monthlyIntRate, -length*12));
 	}
 	public String toString(){ 
-		return "Amortized Loan"  + "\n" + "Name: " + "\t" + name + "\n" + "Principle: " + "\t" + principle + "\n" + "Interest Rate: " + "\t" + interestRate + "\n" + "Length of Loan: " + "\t" + length + "\n"  + "Payment: " + "\t" + monthlyPayment + "\n" + "\n"; 
-
+		return "Simple Interest Loan"  + "\n" + "Name: " + "\t" + name + "\n" + 
+				"Principle: " + "\t" + principle + "\n" + 
+				"Interest Rate: " + "\t" + interestRate + "\n" + 
+				"Length of Loan: " + "\t" + length + "\n"  + 
+				"Payment: " + "\t" + monthlyPayment + "\n"; 
 	}
 	
 	public double getMonthlyPayment() {
