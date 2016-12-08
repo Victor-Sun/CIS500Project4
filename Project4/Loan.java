@@ -1,6 +1,6 @@
 public abstract class Loan implements Comparable<Loan>
 {
-	protected String name; // the applicant’s name
+	protected String name; // the applicantï¿½s name
 	protected double interestRate; // the annual interest rate
 	protected int length; // the length of the load in years
 	protected double principle; // the principle
@@ -21,12 +21,24 @@ public abstract class Loan implements Comparable<Loan>
 		return this.interestRate;
 	}
 	
+	public void setRate(double r){
+		this.interestRate = r;
+	}
+	
 	public int getLength(){
 		return this.length;
 	}
 	
+	public void setLength(int l){
+		this.length = l;
+	}
+	
 	public double getPrinciple(){
 		return this.principle;
+	}
+	
+	public void setPrinciple(double p){
+		this.principle = p;
 	}
 
 	public double getMonthlyPayment() {

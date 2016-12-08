@@ -19,7 +19,7 @@ public class LoanFrame extends JFrame{
 	private ButtonGroup b, sb;
 	private JRadioButton aSimple, aAmortized, sSimple, sAmortized;
 	private JLabel alPayment;
-	private JTextField atName, atPrincipal, atLength, sName, sPrinciple, sLength, sPayment;
+	private JTextField atName, atPrinciple, atLength, sName, sPrinciple, sLength, sPayment;
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEGHT = 800;
 	private Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
@@ -55,7 +55,7 @@ public class LoanFrame extends JFrame{
 		alPayment = new JLabel("$$$$.$$");
 
 		atName = new JTextField();
-		atPrincipal = new JTextField();
+		atPrinciple = new JTextField();
 		atLength = new JTextField();
 		sName = new JTextField();
 		sPrinciple = new JTextField();
@@ -83,6 +83,17 @@ public class LoanFrame extends JFrame{
 		sb.add(sSimple);
 		sSimple.setSelected(true);
 
+		//JMenu
+//		JMenuBar bar = new JMenuBar();
+//		JMenu f = new JMenu("File");
+//		JMenuItem mNew = new JMenuItem("New Session");
+//		JMenuItem mDelete = new JMenuItem("Delete Session");
+//		JMenuItem mExit = new JMenuItem("Exit");
+//		
+//		this.setJMenuBar(bar);
+//		bar.add(f);
+		
+		
 		//Add buttons to the desktop panel
 		panel.add(add);
 		panel.add(search);
@@ -96,8 +107,8 @@ public class LoanFrame extends JFrame{
 		aNorth.add(aAmortized);
 		aCenter.add(new JLabel("Name: "));
 		aCenter.add(atName);
-		aCenter.add(new JLabel("Principal: "));
-		aCenter.add(atPrincipal);
+		aCenter.add(new JLabel("Principle: "));
+		aCenter.add(atPrinciple);
 		aCenter.add(new JLabel("Length: "));
 		aCenter.add(atLength);
 		aCenter.add(new JLabel("Interest Rate: "));
@@ -114,7 +125,7 @@ public class LoanFrame extends JFrame{
 		sCenter.setBorder(new TitledBorder(new EtchedBorder(), "Loan Info"));
 		sCenter.add(new JLabel("Name: "));
 		sCenter.add(sName);
-		sCenter.add(new JLabel("Principal: "));
+		sCenter.add(new JLabel("Principle: "));
 		sCenter.add(sPrinciple);
 		sCenter.add(new JLabel("Length: "));
 		sCenter.add(sLength);
@@ -146,6 +157,7 @@ public class LoanFrame extends JFrame{
 		save.addActionListener(l);
 		sSearch.addActionListener(l);
 		sDelete.addActionListener(l);
+		sEdit.addActionListener(l);
 
 
 	}
@@ -210,26 +222,26 @@ public class LoanFrame extends JFrame{
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == aCalculate){
-				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
-					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
+				if(atPrinciple.getText().isEmpty() && atLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Principle and Length cannot be empty!");
+				} else if(atPrinciple.getText().isEmpty() && atLength.getText().isEmpty() == false){
+					JOptionPane.showMessageDialog(null, "Principle cannot be empty!");
+				} else if(atPrinciple.getText().isEmpty() == false && atLength.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
-				} else if(!atPrincipal.getText().matches("[0-9]+")){
-					JOptionPane.showMessageDialog(null, "Principal can only be a number!");
+				} else if(!atPrinciple.getText().matches("[0-9]+")){
+					JOptionPane.showMessageDialog(null, "Principle can only be a number!");
 				} else if(!atLength.getText().matches("[0-9]+")){		
 					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
 				} else {
 					if(aSimple.isSelected()){
-						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Simple");
-						SimpleLoan l = new SimpleLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrinciple.getText()), "Simple");
+						SimpleLoan l = new SimpleLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrinciple.getText()));
 						l.calcMonthPayment();
 						DecimalFormat format = new DecimalFormat(".##");
 						alPayment.setText((format.format(l.getMonthlyPayment())));
 					} else {
-						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Amortized");
-						AmortizedLoan l = new AmortizedLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
+						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrinciple.getText()), "Amortized");
+						AmortizedLoan l = new AmortizedLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrinciple.getText()));
 						l.calcMonthPayment();
 						DecimalFormat format = new DecimalFormat(".##");
 						alPayment.setText((format.format(l.getMonthlyPayment())));
@@ -275,20 +287,22 @@ public class LoanFrame extends JFrame{
 				refresh();
 			}
 			if(e.getSource() == sEdit){
-				if(sPrinciple.getText().isEmpty() && atLength.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
-				} else if(sPrinciple.getText().isEmpty() && atLength.getText().isEmpty() == false){
-					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
-				} else if(sPrinciple.getText().isEmpty() == false && atLength.getText().isEmpty()){
+				if(sPrinciple.getText().isEmpty() && sLength.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Principle and Length cannot be empty!");
+				} else if(sPrinciple.getText().isEmpty() && sLength.getText().isEmpty() == false){
+					JOptionPane.showMessageDialog(null, "Principle cannot be empty!");
+				} else if(sPrinciple.getText().isEmpty() == false && sLength.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
-				} else if(!sPrinciple.getText().matches("[0-9]+")){
-					JOptionPane.showMessageDialog(null, "Principal can only be a number!");
-				} else if(!sPrinciple.getText().matches("[0-9]+")){		
+				} else if(!sPrinciple.getText().matches("[0-9]+([,.][0-9]{1,2})?")){
+					JOptionPane.showMessageDialog(null, "Principle can only be a number!");
+				} else if(!sPrinciple.getText().matches("[0-9]+([,.][0-9]{1,2})?")){		
 					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
 				} else {
 					loan.setPrinciple(sName.getText(),Double.parseDouble(sPrinciple.getText()));
 					loan.setLength(sName.getText(), Integer.parseInt(sLength.getText()));
 					loan.setInterest(sName.getText(), (double)scInterestRate.getSelectedItem());
+					JOptionPane.showMessageDialog(null, "Record editted!");	
+					
 				}
 				refresh();
 			}

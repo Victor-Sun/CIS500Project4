@@ -203,7 +203,7 @@ public class LoanManager {
 	}
 
 	public void setPrinciple(String name, double p){
-		SearchLoan(name).principle = p;
+		SearchLoan(name).setPrinciple(p);
 	}
 	
 	public double getInterest(String name){
@@ -211,7 +211,7 @@ public class LoanManager {
 	}
 
 	public void setInterest(String name, double i){
-		SearchLoan(name).interestRate = i;
+		SearchLoan(name).setRate(i);;
 	}
 	
 	public int getLength(String name){
@@ -219,7 +219,7 @@ public class LoanManager {
 	}
 	
 	public void setLength(String name, int l){
-		SearchLoan(name).length = l;
+		SearchLoan(name).setLength(l);
 	}
 	
 	public double getPayment(String name){
