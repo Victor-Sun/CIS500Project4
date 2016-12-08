@@ -31,7 +31,7 @@ public class LoanFrame extends JFrame{
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
-		//		loan.loadLoan();
+		loan.loadLoan();
 
 		//Initializing variables
 		add = new JButton("Add");

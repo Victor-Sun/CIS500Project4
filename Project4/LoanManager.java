@@ -25,62 +25,69 @@ public class LoanManager {
 
 	ArrayList <Loan> al, sl;
 	Scanner in = new Scanner(System.in);
-	File fileName = new File("Loan.txt");
 	String line;
-	ArrayList fileloans = new ArrayList();
 	double monthlyPayment;
-	
+
 	public LoanManager() {
 		sl = new ArrayList <Loan>();
 		al = new ArrayList <Loan>();
 	}
 
 	//TODO
-	//	public void loadLoan() {
-	//		try{
-	//			BufferedReader input = new BufferedReader(new FileReader(fileName));
-	//			if (!input.ready()){
-	//				throw new IOException();
-	//			}
-	//			while ((line = input.readLine()) != null){
-	//				fileloans.add(line);
-	//			}
-	//			input.close();
-	//		}
-	//		catch (IOException e)
-	//		{
-	//			JOptionPane.showMessageDialog(null, "Previous Session could not be found, starting new session.");
-	//		}
-	//
-	//		int sz = fileloans.size();
-	//		for (int i = 0; i < sz; i++){
-	//			loans = fileloans;
-	//		}
-	//	}
-	//
-		public void saveSession(){
-			try {
-				FileWriter fw = new FileWriter(fileName, true);
-				Writer output = new BufferedWriter(fw);
-				int sz = sl.size();
-				for (int i = 0; i < sz; i++) {
-					output.append(sl.get(i).name + "," + 
-								sl.get(i).interestRate +  "," +
-								sl.get(i).length + "," +
-								sl.get(i).principle + "," +
-								sl.get(i).monthlyPayment + ",simple" + "|");
-				}
-				output.close();
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Error Creating File!");
+	public void loadLoan() {
+		String iName, iRate, iLength, iPrinciple, iType;
+		try{
+//			BufferedReader input = new BufferedReader(new FileReader("Loan.txt"));
+			Scanner read = new Scanner(new File("Loan.txt"));
+//			if (!input.ready()){
+//				throw new IOException();
+//			}
+			read.useDelimiter(",");
+			while (read.hasNext()){
+				iType = read.next();
+				iName = read.next();
+				iRate = read.next();
+				iLength = read.next();
+				iPrinciple = read.next();
+				this.addLoan(iName, Double.parseDouble(iRate), Integer.parseInt(iLength), Double.parseDouble(iPrinciple), iType);
 			}
+			read.close();
 		}
+		catch (IOException e)
+		{
+			JOptionPane.showMessageDialog(null, "Previous Session could not be found, starting new session.");
+		}
+	}
+
+	public void saveSession(){
+		try {
+			FileWriter fw = new FileWriter("Loan.txt", true);
+			Writer output = new BufferedWriter(fw);
+			for (int i = 0; i < sl.size(); i++) {
+				output.append("Simple," + 
+						sl.get(i).name + "," + 
+						sl.get(i).interestRate +  "," +
+						sl.get(i).length + "," +
+						sl.get(i).principle + ",");
+			}
+			for (int i = 0; i < al.size(); i++) {
+				output.append("Amortized," + 
+						al.get(i).name + "," + 
+						al.get(i).interestRate +  "," +
+						al.get(i).length + "," +
+						al.get(i).principle + ",");
+			}
+			output.close();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error Creating File!");
+		}
+	}
 
 	public void addLoan(String name, double interestRate, int length, double principle, String type) {
 		if(this.exists(name)){
 			JOptionPane.showMessageDialog(null, name + ", you can only have one loan at a time!");
 		} else {
-			if(type == "Simple"){
+			if(type.equals("Simple")){
 				SimpleLoan simple = new SimpleLoan(name, interestRate, length, principle);
 				simple.calcMonthPayment();
 				sl.add(simple);
@@ -172,15 +179,13 @@ public class LoanManager {
 	}
 
 	public int totalSimpleLoan(){
-		int x = 0;
-		for (int i = 0; i < sl.size(); ++i) {
-			if (sl.get(i).toString().contains("Simple")) {
-				x++;
-			}
-		}
-		return x;
+		return sl.size();
 	}
-
+	
+	public int totalAmortizedLoan(){
+		return al.size();
+	}
+	
 	public boolean isSimple(String name){
 		for(int i = 0; i < sl.size(); i++){
 			if(sl.get(i).name.toLowerCase().equals(name.toLowerCase())){
@@ -189,34 +194,23 @@ public class LoanManager {
 		}
 		return false;
 	}
-
-	public int totalAmortizedLoan(){
-		int x = 0;
-
-		for (int i = 0; i < al.size(); ++i) {
-			if (al.get(i).toString().contains("Amortized")) {
-				x++;
-			}
-		}
-		return x;
-	}
-
+	
 	public double getPrinciple(String name){
 		return SearchLoan(name).getPrinciple();
 	}
-	
+
 	public double getInterest(String name){
 		return SearchLoan(name).getRate();
 	}
-	
+
 	public int getLength(String name){
 		return SearchLoan(name).getLength();
 	}
-	
+
 	public double getPayment(String name){
 		return SearchLoan(name).getMonthlyPayment();
 	}
-	
+
 	public String toString(){
 		return sl.toString() + al.toString();
 	}
