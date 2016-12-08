@@ -61,17 +61,20 @@ public class LoanManager {
 
 	public void saveSession(){
 		try {
-			FileWriter fw = new FileWriter("Loan.txt", true);
+			FileWriter fw = new FileWriter("Loan.txt", false);
+			File f = new File("Loan.txt");
+			f.delete();
 			Writer output = new BufferedWriter(fw);
+			
 			for (int i = 0; i < sl.size(); i++) {
-				output.append("Simple," + 
+				output.write("Simple," + 
 						sl.get(i).name + "," + 
 						sl.get(i).interestRate +  "," +
 						sl.get(i).length + "," +
 						sl.get(i).principle + ",");
 			}
 			for (int i = 0; i < al.size(); i++) {
-				output.append("Amortized," + 
+				output.write("Amortized," + 
 						al.get(i).name + "," + 
 						al.get(i).interestRate +  "," +
 						al.get(i).length + "," +
