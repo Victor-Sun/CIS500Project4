@@ -124,9 +124,13 @@ public class LoanFrame extends JFrame{
 		
 		//Add buttons to the desktop panel
 		panel.add(add);
+		add.setToolTipText("Add a loan");
 		panel.add(search);
+		search.setToolTipText("Search for a loan");
 		panel.add(save);
+		save.setToolTipText("Save the current session to a file");
 		panel.add(summary);
+		summary.setToolTipText("See a summary of the current loans");
 
 		//Add Loan Internal Frame
 		aNorth.setBorder(new TitledBorder(new EtchedBorder(), "Loan Type"));
@@ -162,8 +166,11 @@ public class LoanFrame extends JFrame{
 		sCenter.add(new JLabel("Monthly Payment: "));
 		sCenter.add(sPayment);
 		sSouth.add(sEdit);
+		sEdit.setToolTipText("Edit a loan based on name.");
 		sSouth.add(sDelete);
+		sDelete.setToolTipText("Delete a loan based on name.");
 		sSouth.add(sSearch);
+		sSearch.setToolTipText("Search for a loan based on name.");
 
 		add(panel,BorderLayout.SOUTH);
 
