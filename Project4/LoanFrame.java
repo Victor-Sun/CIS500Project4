@@ -116,10 +116,10 @@ public class LoanFrame extends JFrame{
 		sCenter.add(sName);
 		sCenter.add(new JLabel("Principal: "));
 		sCenter.add(sPrinciple);
-		sCenter.add(new JLabel("Interest Rate: "));
-		sCenter.add(scInterestRate);
 		sCenter.add(new JLabel("Length: "));
 		sCenter.add(sLength);
+		sCenter.add(new JLabel("Interest Rate: "));
+		sCenter.add(scInterestRate);
 		sCenter.add(new JLabel("Monthly Payment: "));
 		sCenter.add(sPayment);
 		sSouth.add(sEdit);
@@ -260,7 +260,6 @@ public class LoanFrame extends JFrame{
 					sPrinciple.setEnabled(true);
 					scInterestRate.setEnabled(true);
 					sLength.setEnabled(true);
-					sPayment.setEnabled(true);
 					sEdit.setEnabled(true);
 					sDelete.setEnabled(true);
 				}
@@ -276,18 +275,20 @@ public class LoanFrame extends JFrame{
 				refresh();
 			}
 			if(e.getSource() == sEdit){
-				if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty()){
+				if(sPrinciple.getText().isEmpty() && atLength.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Principal and Length cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() && atLength.getText().isEmpty() == false){
+				} else if(sPrinciple.getText().isEmpty() && atLength.getText().isEmpty() == false){
 					JOptionPane.showMessageDialog(null, "Principal cannot be empty!");
-				} else if(atPrincipal.getText().isEmpty() == false && atLength.getText().isEmpty()){
+				} else if(sPrinciple.getText().isEmpty() == false && atLength.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Length cannot be empty!");
-				} else if(!atPrincipal.getText().matches("[0-9]+")){
+				} else if(!sPrinciple.getText().matches("[0-9]+")){
 					JOptionPane.showMessageDialog(null, "Principal can only be a number!");
-				} else if(!atLength.getText().matches("[0-9]+")){		
+				} else if(!sPrinciple.getText().matches("[0-9]+")){		
 					JOptionPane.showMessageDialog(null, "Length can only be a number!");	
 				} else {
-					//TODO Add method to edit record
+					loan.setPrinciple(sName.getText(),Double.parseDouble(sPrinciple.getText()));
+					loan.setLength(sName.getText(), Integer.parseInt(sLength.getText()));
+					loan.setInterest(sName.getText(), (double)scInterestRate.getSelectedItem());
 				}
 				refresh();
 			}

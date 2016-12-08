@@ -202,14 +202,26 @@ public class LoanManager {
 		return SearchLoan(name).getPrinciple();
 	}
 
+	public void setPrinciple(String name, double p){
+		SearchLoan(name).principle = p;
+	}
+	
 	public double getInterest(String name){
 		return SearchLoan(name).getRate();
 	}
 
+	public void setInterest(String name, double i){
+		SearchLoan(name).interestRate = i;
+	}
+	
 	public int getLength(String name){
 		return SearchLoan(name).getLength();
 	}
-
+	
+	public void setLength(String name, int l){
+		SearchLoan(name).length = l;
+	}
+	
 	public double getPayment(String name){
 		return SearchLoan(name).getMonthlyPayment();
 	}
