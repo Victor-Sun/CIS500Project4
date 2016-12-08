@@ -97,11 +97,12 @@ public class LoanFrame extends JFrame{
 		f.add(mNew);
 		f.add(mDelete);
 		f.addSeparator();
-		f.add(mExit);		
+		f.add(mExit);
 		
         mNew.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 loan.newSession();
+                JOptionPane.showMessageDialog(null, "New session started!");
                 refresh();
             }
         });
@@ -109,12 +110,14 @@ public class LoanFrame extends JFrame{
         mDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 loan.deleteSession();
+                JOptionPane.showMessageDialog(null, "Session Deleted!");
                 refresh();
             }
         });
         
         mExit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+            	JOptionPane.showMessageDialog(null, "Good bye!");
                 System.exit(0);
             }
         });
