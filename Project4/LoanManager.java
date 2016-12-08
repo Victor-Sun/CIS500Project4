@@ -113,6 +113,17 @@ public class LoanManager {
 		}
 	}
 
+	public void newSession(){
+		al.clear();
+		sl.clear();
+	}
+	
+	public void deleteSession(){
+		File f = new File("Loan.txt");
+		f.delete();
+		this.newSession();
+	}
+	
 	public boolean exists(String names){
 		for (int i = 0; i < sl.size(); ++i) {
 			Loan tmpL = sl.get(i);

@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import com.sun.swing.internal.plaf.metal.resources.metal;
 /**
  * 
  * @author Victor
@@ -84,15 +86,38 @@ public class LoanFrame extends JFrame{
 		sSimple.setSelected(true);
 
 		//JMenu
-//		JMenuBar bar = new JMenuBar();
-//		JMenu f = new JMenu("File");
-//		JMenuItem mNew = new JMenuItem("New Session");
-//		JMenuItem mDelete = new JMenuItem("Delete Session");
-//		JMenuItem mExit = new JMenuItem("Exit");
-//		
-//		this.setJMenuBar(bar);
-//		bar.add(f);
+		JMenuBar bar = new JMenuBar();
+		JMenu f = new JMenu("File");
+		JMenuItem mNew = new JMenuItem("New Session");
+		JMenuItem mDelete = new JMenuItem("Delete Session");
+		JMenuItem mExit = new JMenuItem("Exit");
 		
+		this.setJMenuBar(bar);
+		bar.add(f);
+		f.add(mNew);
+		f.add(mDelete);
+		f.addSeparator();
+		f.add(mExit);		
+		
+        mNew.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                loan.newSession();
+                refresh();
+            }
+        });
+		
+        mDelete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                loan.deleteSession();
+                refresh();
+            }
+        });
+        
+        mExit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                System.exit(0);
+            }
+        });
 		
 		//Add buttons to the desktop panel
 		panel.add(add);
