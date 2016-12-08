@@ -1,10 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.DefaultStyledDocument;
 /**
  * 
  * @author Victor
@@ -19,7 +19,7 @@ public class LoanFrame extends JFrame{
 	private ButtonGroup b, sb;
 	private JRadioButton aSimple, aAmortized, sSimple, sAmortized;
 	private JLabel alPayment;
-	private JTextField atName, atPrincipal, atLength, sName, sPrincipal, sLength, sPayment;
+	private JTextField atName, atPrincipal, atLength, sName, sPrinciple, sLength, sPayment;
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEGHT = 800;
 	private Double arRate[] = {0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07};
@@ -31,8 +31,8 @@ public class LoanFrame extends JFrame{
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
-//		loan.loadLoan();
-		
+		//		loan.loadLoan();
+
 		//Initializing variables
 		add = new JButton("Add");
 		search = new JButton("Search");
@@ -58,7 +58,7 @@ public class LoanFrame extends JFrame{
 		atPrincipal = new JTextField();
 		atLength = new JTextField();
 		sName = new JTextField();
-		sPrincipal = new JTextField();
+		sPrinciple = new JTextField();
 		sLength = new JTextField();
 		sPayment = new JTextField();
 
@@ -115,7 +115,7 @@ public class LoanFrame extends JFrame{
 		sCenter.add(new JLabel("Name: "));
 		sCenter.add(sName);
 		sCenter.add(new JLabel("Principal: "));
-		sCenter.add(sPrincipal);
+		sCenter.add(sPrinciple);
 		sCenter.add(new JLabel("Interest Rate: "));
 		sCenter.add(scInterestRate);
 		sCenter.add(new JLabel("Length: "));
@@ -146,17 +146,17 @@ public class LoanFrame extends JFrame{
 		save.addActionListener(l);
 		sSearch.addActionListener(l);
 		sDelete.addActionListener(l);
-		
+
 
 	}
-	
+
 	public void refresh(){
 		sSummary.setText("Total Loans: " + loan.totalLoan() + 
 				"\nAmount of Simple Loans: " + loan.totalSimpleLoan() + 
 				"\nAmount of Amortized Loans: " + loan.totalAmortizedLoan() + 
 				"\nTotal amount of money borrowed: " + loan.totalMoney());
 	}
-	
+
 	class OpenListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == add){
@@ -183,7 +183,7 @@ public class LoanFrame extends JFrame{
 					seFrame.add(sCenter, BorderLayout.CENTER);
 					seFrame.add(sSouth, BorderLayout.SOUTH);
 
-					sPrincipal.setEnabled(false);
+					sPrinciple.setEnabled(false);
 					scInterestRate.setEnabled(false);
 					sLength.setEnabled(false);
 					sPayment.setEnabled(false);
@@ -225,12 +225,14 @@ public class LoanFrame extends JFrame{
 						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Simple");
 						SimpleLoan l = new SimpleLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
 						l.calcMonthPayment();
-						alPayment.setText(Double.toString(l.getMonthlyPayment()));
+						DecimalFormat format = new DecimalFormat(".##");
+						alPayment.setText((format.format(l.getMonthlyPayment())));
 					} else {
 						loan.addLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()), "Amortized");
 						AmortizedLoan l = new AmortizedLoan(atName.getText(), (Double) cRate.getSelectedItem() , Integer.parseInt(atLength.getText()), Double.parseDouble(atPrincipal.getText()));
 						l.calcMonthPayment();
-						alPayment.setText(Double.toString(l.getMonthlyPayment()));
+						DecimalFormat format = new DecimalFormat(".##");
+						alPayment.setText((format.format(l.getMonthlyPayment())));
 					}
 					refresh();
 				}
@@ -249,14 +251,13 @@ public class LoanFrame extends JFrame{
 					} else {
 						sAmortized.setSelected(true);
 					}
-					
 					loan.SearchLoan(sName.getText());
-					sPrincipal.setText(Double.toString(loan.getPrinciple(sName.getText())));
+					sPrinciple.setText(Double.toString(loan.getPrinciple(sName.getText())));
 					scInterestRate.setSelectedItem((double)loan.getInterest(sName.getText()));
 					sLength.setText(Integer.toString(loan.getLength(sName.getText())));
 					sPayment.setText(Double.toString(loan.getPayment(sName.getText())));
-					
-					sPrincipal.setEnabled(true);
+
+					sPrinciple.setEnabled(true);
 					scInterestRate.setEnabled(true);
 					sLength.setEnabled(true);
 					sPayment.setEnabled(true);
@@ -267,7 +268,7 @@ public class LoanFrame extends JFrame{
 			if(e.getSource() == sDelete){
 				int d = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the record?", "Delete", JOptionPane.YES_NO_OPTION);
 				if (d == JOptionPane.YES_OPTION) {
-					loan.deleteLoan("AB");
+					loan.deleteLoan(sName.getText());
 					JOptionPane.showMessageDialog(null, "Record Deleted!");
 				} else {
 					JOptionPane.showMessageDialog(null, "Nothing Happened!");
@@ -291,7 +292,7 @@ public class LoanFrame extends JFrame{
 				refresh();
 			}
 			if(e.getSource() == save){
-				
+				loan.saveSession();
 				JOptionPane.showMessageDialog(null, "Session saved!");
 			}
 		}

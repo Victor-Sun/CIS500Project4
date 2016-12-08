@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class AmortizedLoan extends Loan {
 
 	public AmortizedLoan(String name, double rate, int years, double amount) {
@@ -6,8 +8,9 @@ public class AmortizedLoan extends Loan {
 	}
 	public void calcMonthPayment(){
 		double monthlyIntRate = (double)(interestRate / 12);
-
-		monthlyPayment = (principle * monthlyIntRate) / (1 - Math.pow(1 + monthlyIntRate, -length*12));
+		DecimalFormat format = new DecimalFormat(".##");
+		
+		monthlyPayment = Double.parseDouble(format.format((principle * monthlyIntRate) / (1 - Math.pow(1 + monthlyIntRate, -length*12))));
 	}
 	public String toString(){ 
 		return "Simple Interest Loan"  + "\n" + "Name: " + "\t" + name + "\n" + 
@@ -15,6 +18,7 @@ public class AmortizedLoan extends Loan {
 				"Interest Rate: " + "\t" + interestRate + "\n" + 
 				"Length of Loan: " + "\t" + length + "\n"  + 
 				"Payment: " + "\t" + monthlyPayment + "\n"; 
+
 	}
 	
 	public double getMonthlyPayment() {

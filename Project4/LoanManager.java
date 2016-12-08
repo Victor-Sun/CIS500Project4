@@ -58,19 +58,23 @@ public class LoanManager {
 	//		}
 	//	}
 	//
-	//	public void saveSession(){
-	//		try {
-	//			FileWriter fw = new FileWriter(fileName, true);
-	//			Writer output = new BufferedWriter(fw);
-	//			int sz = loans.size();
-	//			for (int i = 0; i < sz; i++) {
-	//				output.append(loans.get(i) + "\n");
-	//			}
-	//			output.close();
-	//		} catch (Exception e) {
-	//			JOptionPane.showMessageDialog(null, "Error Creating File!");
-	//		}
-	//	}
+		public void saveSession(){
+			try {
+				FileWriter fw = new FileWriter(fileName, true);
+				Writer output = new BufferedWriter(fw);
+				int sz = sl.size();
+				for (int i = 0; i < sz; i++) {
+					output.append(sl.get(i).name + "," + 
+								sl.get(i).interestRate +  "," +
+								sl.get(i).length + "," +
+								sl.get(i).principle + "," +
+								sl.get(i).monthlyPayment + ",simple" + "|");
+				}
+				output.close();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Error Creating File!");
+			}
+		}
 
 	public void addLoan(String name, double interestRate, int length, double principle, String type) {
 		if(this.exists(name)){

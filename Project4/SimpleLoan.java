@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 public class SimpleLoan extends Loan {
 
 
@@ -7,7 +9,8 @@ public class SimpleLoan extends Loan {
 	}
 
 	public void calcMonthPayment(){
-		monthlyPayment = (principle * (interestRate*length + 1))/(12*length) ;
+		DecimalFormat format = new DecimalFormat(".##");
+		monthlyPayment = Double.parseDouble(format.format((principle * (interestRate*length + 1))/(12*length))) ;
 	}
 
 	public String toString(){ 
