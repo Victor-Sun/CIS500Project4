@@ -337,6 +337,11 @@ public class LoanFrame extends JFrame{
 					loan.setPrinciple(sName.getText(),Double.parseDouble(sPrinciple.getText()));
 					loan.setLength(sName.getText(), Integer.parseInt(sLength.getText()));
 					loan.setInterest(sName.getText(), (double)scInterestRate.getSelectedItem());
+					if(sSimple.isSelected()){
+						loan.editLoanType(sName.getText(), "Simple");
+					} else {
+						loan.editLoanType(sName.getText(), "Amortized");
+					}
 					JOptionPane.showMessageDialog(null, "Record editted!");	
 					
 				}

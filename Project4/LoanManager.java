@@ -33,15 +33,10 @@ public class LoanManager {
 		al = new ArrayList <Loan>();
 	}
 
-	//TODO
 	public void loadLoan() {
 		String iName, iRate, iLength, iPrinciple, iType;
 		try{
-//			BufferedReader input = new BufferedReader(new FileReader("Loan.txt"));
 			Scanner read = new Scanner(new File("Loan.txt"));
-//			if (!input.ready()){
-//				throw new IOException();
-//			}
 			read.useDelimiter(",");
 			while (read.hasNext()){
 				iType = read.next();
@@ -99,20 +94,16 @@ public class LoanManager {
 				amortized.calcMonthPayment();
 				al.add(amortized);
 			}
-			//		if (loanType.equals("Simple")) {
-			//			SimpleLoan simple = new SimpleLoan(name, interestRate, length, principle);
-			//			simple.calcMonthPayment();
-			//			loans.add(simple);
-			//		} else if (loanType.equals("Amortized")) {
-			//			AmortizedLoan amortized = new AmortizedLoan(name, interestRate, length, principle);
-			//			amortized.calcMonthPayment();
-			//			loans.add(amortized);
-			//		} else {
-			//			JOptionPane.showMessageDialog(null, "Loan not Supported. Please Enter either Simple or Amortized");
-			//		}
 		}
 	}
 
+	public void editLoanType(String n, String t){
+		Loan l;
+		l = SearchLoan(n);
+		deleteLoan(n);
+		addLoan(n,l.getRate(),l.getLength(),l.getPrinciple(),t);
+	}
+	
 	public void newSession(){
 		al.clear();
 		sl.clear();
