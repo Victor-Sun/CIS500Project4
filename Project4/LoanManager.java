@@ -28,11 +28,17 @@ public class LoanManager {
 	String line;
 	double monthlyPayment;
 
+	/**
+	 * Constructor
+	 */
 	public LoanManager() {
 		sl = new ArrayList <Loan>();
 		al = new ArrayList <Loan>();
 	}
 
+	/**
+	 * Loads a saved session
+	 */
 	public void loadLoan() {
 		String iName, iRate, iLength, iPrinciple, iType;
 		try{
@@ -54,13 +60,16 @@ public class LoanManager {
 		}
 	}
 
+	/**
+	 * Saves the current session to file
+	 */
 	public void saveSession(){
 		try {
 			FileWriter fw = new FileWriter("Loan.txt", false);
 			File f = new File("Loan.txt");
 			f.delete();
 			Writer output = new BufferedWriter(fw);
-			
+
 			for (int i = 0; i < sl.size(); i++) {
 				output.write("Simple," + 
 						sl.get(i).name + "," + 
@@ -81,6 +90,15 @@ public class LoanManager {
 		}
 	}
 
+	/**
+	 * Adds a loan to the collection
+	 * 
+	 * @param name
+	 * @param interestRate
+	 * @param length
+	 * @param principle
+	 * @param type
+	 */
 	public void addLoan(String name, double interestRate, int length, double principle, String type) {
 		if(this.exists(name)){
 			JOptionPane.showMessageDialog(null, name + ", you can only have one loan at a time!");
@@ -97,24 +115,42 @@ public class LoanManager {
 		}
 	}
 
+	/**
+	 * Edits the loan with a name and type
+	 * 
+	 * @param n
+	 * @param t
+	 */
 	public void editLoanType(String n, String t){
 		Loan l;
 		l = SearchLoan(n);
 		deleteLoan(n);
 		addLoan(n,l.getRate(),l.getLength(),l.getPrinciple(),t);
 	}
-	
+
+	/**
+	 * Clears the current session
+	 */
 	public void newSession(){
 		al.clear();
 		sl.clear();
 	}
-	
+
+	/**
+	 * Deletes the current session and saved file
+	 */
 	public void deleteSession(){
 		File f = new File("Loan.txt");
 		f.delete();
 		this.newSession();
 	}
-	
+
+	/**
+	 * Checks if a loan exists
+	 * 
+	 * @param names
+	 * @return
+	 */
 	public boolean exists(String names){
 		for (int i = 0; i < sl.size(); ++i) {
 			Loan tmpL = sl.get(i);
@@ -131,6 +167,11 @@ public class LoanManager {
 		return false;
 	}
 
+	/**
+	 * Deletes a loan
+	 * 
+	 * @param names
+	 */
 	public void deleteLoan(String names){
 		for(int i = 0; i < sl.size(); ++i) {
 			Loan tmpL = sl.get(i);
@@ -148,6 +189,12 @@ public class LoanManager {
 		}
 	}
 
+	/**
+	 * Searches for a loan
+	 * 
+	 * @param names
+	 * @return
+	 */
 	public Loan SearchLoan(String names){
 		Loan search = null;
 		for(int i = 0; i < al.size(); ++i){
@@ -167,6 +214,11 @@ public class LoanManager {
 		return search;
 	}
 
+	/**
+	 * Get's the total money borrowed
+	 * 
+	 * @return
+	 */
 	public double totalMoney(){
 		double totalBorrowed = 0;
 
@@ -179,18 +231,36 @@ public class LoanManager {
 		return totalBorrowed;
 	}
 
+	/**
+	 * Get's the total amount of loans
+	 * @return
+	 */
 	public int totalLoan(){
 		return al.size() + sl.size();
 	}
 
+	/**
+	 * Get's the total amount of simple loans
+	 * 
+	 * @return
+	 */
 	public int totalSimpleLoan(){
 		return sl.size();
 	}
-	
+
+	/**
+	 * Get's the total amount of amortized loans
+	 * @return
+	 */
 	public int totalAmortizedLoan(){
 		return al.size();
 	}
-	
+
+	/**
+	 * Checks if a loan is simple or amortized
+	 * @param name
+	 * @return
+	 */
 	public boolean isSimple(String name){
 		for(int i = 0; i < sl.size(); i++){
 			if(sl.get(i).name.toLowerCase().equals(name.toLowerCase())){
@@ -199,7 +269,11 @@ public class LoanManager {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Gets the name of a loan
+	 * @return
+	 */
 	public String getName(){
 		String str = "";
 		for(int i = 0; i < sl.size(); i++){
@@ -210,31 +284,70 @@ public class LoanManager {
 		}		
 		return str;
 	}
-	
+
+	/**
+	 * Gets the principle of a loan
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public double getPrinciple(String name){
 		return SearchLoan(name).getPrinciple();
 	}
 
+	/**
+	 * Sets the principle of a loan
+	 * 
+	 * @param name
+	 * @param p
+	 */
 	public void setPrinciple(String name, double p){
 		SearchLoan(name).setPrinciple(p);
 	}
-	
+
+	/**
+	 * Gets the interest of a loan
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public double getInterest(String name){
 		return SearchLoan(name).getRate();
 	}
 
+	/**
+	 * Sets the interest for a loan
+	 * @param name
+	 * @param i
+	 */
 	public void setInterest(String name, double i){
 		SearchLoan(name).setRate(i);;
 	}
-	
+
+	/**
+	 * Gets the length of a loan
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public int getLength(String name){
 		return SearchLoan(name).getLength();
 	}
-	
+
+	/**
+	 * Sets the length of a loan
+	 * @param name
+	 * @param l
+	 */
 	public void setLength(String name, int l){
 		SearchLoan(name).setLength(l);
 	}
-	
+
+	/**
+	 * Gets the monthly payment of a loan
+	 * @param name
+	 * @return
+	 */
 	public double getPayment(String name){
 		return SearchLoan(name).getMonthlyPayment();
 	}
