@@ -39,10 +39,11 @@ public class LoanManager {
 	/**
 	 * Loads a saved session
 	 */
-	public void loadLoan() {
+	public void loadLoan(String fn) {
 		String iName, iRate, iLength, iPrinciple, iType;
 		try{
-			Scanner read = new Scanner(new File("Loan.txt"));
+//			Scanner read = new Scanner(new File("Loan.txt"));
+			Scanner read = new Scanner(new File(fn));
 			read.useDelimiter(",");
 			while (read.hasNext()){
 				iType = read.next();
@@ -56,35 +57,37 @@ public class LoanManager {
 		}
 		catch (IOException e)
 		{
-			JOptionPane.showMessageDialog(null, "Previous Session could not be found, starting new session.");
+			
 		}
 	}
 
 	/**
 	 * Saves the current session to file
 	 */
-	public void saveSession(){
+	public void saveSession(String fn){
 		try {
-			FileWriter fw = new FileWriter("Loan.txt", false);
-			File f = new File("Loan.txt");
-			f.delete();
-			Writer output = new BufferedWriter(fw);
-
+//			FileWriter fw = new FileWriter("Loan.txt", false);
+			FileWriter fw = new FileWriter(fn, false);
+			BufferedWriter bw = new BufferedWriter(fw);
+//			File f = new File("Loan.txt");
+			File f = new File(fn);
+			
 			for (int i = 0; i < sl.size(); i++) {
-				output.write("Simple," + 
+				bw.write("Simple," + 
 						sl.get(i).name + "," + 
 						sl.get(i).interestRate +  "," +
 						sl.get(i).length + "," +
 						sl.get(i).principle + ",");
 			}
 			for (int i = 0; i < al.size(); i++) {
-				output.write("Amortized," + 
+				bw.write("Amortized," + 
 						al.get(i).name + "," + 
 						al.get(i).interestRate +  "," +
 						al.get(i).length + "," +
 						al.get(i).principle + ",");
 			}
-			output.close();
+			bw.flush();
+			bw.close();
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error Creating File!");
 		}

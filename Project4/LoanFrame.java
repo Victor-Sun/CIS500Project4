@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.text.DecimalFormat;
 
 import javax.swing.*;
@@ -29,11 +30,11 @@ public class LoanFrame extends JFrame{
 	private JComboBox<Double> scInterestRate = new JComboBox<>(arRate);
 	private LoanManager loan = new LoanManager();
 	private JTextArea sSummary = new JTextArea();
-
+	private JFileChooser fc;
+	
 	public LoanFrame(){
 		super("Loan Manager");
 		setSize(FRAME_WIDTH,FRAME_HEGHT);
-		loan.loadLoan();
 
 		//Initializing variables
 		add = new JButton("Add");
@@ -53,6 +54,8 @@ public class LoanFrame extends JFrame{
 		sSimple = new JRadioButton("Simple");
 		sAmortized = new JRadioButton("Amortized");
 
+		fc = new JFileChooser();
+		
 		//Add Loan Labels
 		alPayment = new JLabel("$$$$.$$");
 
@@ -348,8 +351,16 @@ public class LoanFrame extends JFrame{
 				refresh();
 			}
 			if(e.getSource() == save){
-				loan.saveSession();
-				JOptionPane.showMessageDialog(null, "Session saved!");
+//				loan.saveSession();
+//				JOptionPane.showMessageDialog(null, "Session saved!");
+				int returnVal = fc.showSaveDialog(LoanFrame.this);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	                File file = fc.getSelectedFile();
+	                //This is where a real application would save the file.
+	                loan.saveSession(file.getName());
+	            } else {
+	            	System.out.println("Failed");
+	            }
 			}
 		}
 	}
